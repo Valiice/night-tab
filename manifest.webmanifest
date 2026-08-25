@@ -1,0 +1,14 @@
+{
+  "name": "The night's tab",
+  "short_name": "Night tab",
+  "description": "Alcohol vs calories — pick two drinks, get the receipt, BAC curve and calorie gap",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0F1420",
+  "theme_color": "#0F1420",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
