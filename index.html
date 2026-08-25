@@ -38,6 +38,14 @@
   section{margin-top:44px}
   .panel{background:var(--bar);border:1px solid var(--line);border-radius:14px;padding:20px}
   .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px 24px}
+  .slots{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+  @media(max-width:760px){.slots{grid-template-columns:1fr}}
+  .slot{background:var(--bar-2);border-radius:10px;padding:14px 16px;border-left:3px solid var(--amber)}
+  .slot.rose{border-left-color:var(--rose)}
+  .slot .slot-h{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+  .slot.rose .slot-h{color:var(--rose)}
+  .slot>div{margin-top:14px}
+  .slot select{background:var(--bar)}
   label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:6px}
   .val{font-family:var(--mono);color:var(--ink);float:right}
   input[type=range]{width:100%;accent-color:var(--amber);margin:0}
@@ -105,12 +113,21 @@
       <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same alcohol</button><button id="c-glass" aria-pressed="false">Same number of glasses</button></div><div class="note" style="margin-top:4px" id="cnote">Servings differ in size — a shot, a glass, a bottle — so they carry different amounts of alcohol.</div></div>
       <div><label>Stop drinking at <span class="val" id="eo">04:00</span></label><input type="range" id="e" min="1" max="10" step="0.5" value="6"><div class="note" style="margin-top:4px">starting at 22:00 · slide from 23:00 to 08:00</div></div>
       <div><label>Body type (Widmark r)</label><select id="s"><option value="0.68">Male · 0.68</option><option value="0.55">Female · 0.55</option></select></div>
-      <div><label>Drink A</label><select id="da"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option><option value="sweet">Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select></div>
-      <div id="mwa"><label>Mixer for A</label><select id="ma"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
-      <div id="gwa" style="display:none"><label>Sugar &amp; carbs in A <span class="val" id="goa"></span></label><input type="range" id="ga" min="0" max="160" step="5" value="0"><div class="note" style="margin-top:4px">Sugar left after fermentation — see the label table below, or the kcal per 100 ml on the bottle.</div></div>
-      <div><label>Drink B</label><select id="db"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option><option value="sweet" selected>Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select></div>
-      <div id="mwb" style="display:none"><label>Mixer for B</label><select id="mb"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
-      <div id="gwb"><label>Sugar &amp; carbs in B <span class="val" id="gob"></span></label><input type="range" id="gb" min="0" max="160" step="5" value="135"><div class="note" style="margin-top:4px">Sugar left in the wine after fermentation. See the label table below: brut ≈ 0–12 g per litre, a sweet 6% sparkling ≈ 50–140.</div></div>
+    </div>
+
+    <div class="slots">
+      <div class="slot">
+        <div class="slot-h">Drink A</div>
+        <select id="da"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option><option value="sweet">Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select>
+        <div id="mwa"><label>Mixer</label><select id="ma"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
+        <div id="gwa" style="display:none"><label>Sugar &amp; carbs <span class="val" id="goa"></span></label><input type="range" id="ga" min="0" max="160" step="5" value="0"><div class="note" style="margin-top:4px">Sugar left after fermentation — see the label table below, or the kcal per 100 ml on the bottle.</div></div>
+      </div>
+      <div class="slot rose">
+        <div class="slot-h">Drink B</div>
+        <select id="db"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option><option value="sweet" selected>Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select>
+        <div id="mwb" style="display:none"><label>Mixer</label><select id="mb"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
+        <div id="gwb"><label>Sugar &amp; carbs <span class="val" id="gob"></span></label><input type="range" id="gb" min="0" max="160" step="5" value="135"><div class="note" style="margin-top:4px">Sugar left in the wine after fermentation. See the label table below: brut ≈ 0–12 g per litre, a sweet 6% sparkling ≈ 50–140.</div></div>
+      </div>
     </div>
 
     <div class="stats">
