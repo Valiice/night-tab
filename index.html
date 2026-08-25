@@ -112,7 +112,7 @@
     <div class="controls">
       <div><label>Body weight <span class="val" id="wo">80 kg</span></label><input type="range" id="w" min="40" max="140" step="1" value="80"></div>
       <div><label>Drinks per hour <span class="val" id="po">1.0</span></label><input type="range" id="p" min="0.5" max="3" step="0.25" value="1"><div class="note" style="margin-top:4px" id="pnote">1 drink = 10 g ethanol (1 unit) for both</div></div>
-      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same alcohol</button><button id="c-glass" aria-pressed="false">Same number of glasses</button></div><div class="note" style="margin-top:4px" id="cnote">Servings differ in size — a shot, a glass, a bottle — so they carry different amounts of alcohol.</div></div>
+      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same buzz</button><button id="c-glass" aria-pressed="false">Same servings</button></div><div class="note" style="margin-top:4px" id="cnote">Same buzz: 1 drink = 10 g ethanol for both. Same servings: one real serving each — a shot, a glass, a bottle.</div></div>
       <div><label>Stop drinking at <span class="val" id="eo">04:00</span></label><input type="range" id="e" min="1" max="10" step="0.5" value="6"><div class="note" style="margin-top:4px">starting at 22:00 · slide from 23:00 to 08:00</div></div>
       <div><label>Body type (Widmark r)</label><select id="s"><option value="0.68">Male · 0.68</option><option value="0.55">Female · 0.55</option></select></div>
     </div>
@@ -145,6 +145,7 @@
   <h2>How drunk, when</h2>
   <div class="legend"><span><i class="sw" style="background:var(--amber)"></i>BAC on <span id="lg-v1">vodka</span></span><span id="lg-wb"><i class="sw" style="background:var(--rose)"></i>BAC on <span id="lg-w2">wine</span></span><span><i class="sw" style="background:transparent;border-top:2px dashed var(--ink-3);height:0"></i>0.05% — French driving limit (0.5 g/L)</span><span><i class="sw" style="background:transparent;border-top:2px dotted var(--ink-3);height:0"></i>0.02% — novice drivers (0.2 g/L)</span></div>
   <div class="chart"><canvas id="c1" role="img" aria-label="Estimated blood alcohol percentage through the night"></canvas></div>
+  <p class="note" id="bacnote" style="margin-top:10px"></p>
   <div style="margin-top:20px"><div class="two">
     <table>
       <tr><th>BAC</th><th>Roughly how it feels</th></tr>
@@ -158,7 +159,7 @@
       <p style="color:var(--ink-2);margin:0">BAC is blood alcohol concentration: grams of ethanol per 100 ml of blood, shown as a percentage. 0.05% is the same as 0.5 g/L or 0.5‰. The body clears a fixed ~0.015% per hour — about 8 g of ethanol an hour for an 80 kg man, closer to 5 g for a smaller body — so for most people even one 10 g drink an hour slowly stacks up. Food, sleep, and body weight all move the curve; coffee and water don't sober you up, they just pass the time.</p>
     </div>
   </div></div>
-  <p class="note">In "same alcohol" mode the curve is identical for vodka and wine — 10 g of ethanol is 10 g. Switch to "same number of glasses" to see a shot per hour vs a glass per hour. Simple Widmark estimate: each drink lands instantly, liver clears ~0.015% per hour (≈8 g for an 80 kg man). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
+  <p class="note">In "same buzz" mode the curve is identical for both drinks — 10 g of ethanol is 10 g. Switch to "same servings" to see a shot per hour vs a glass or bottle per hour. Simple Widmark estimate: each drink lands instantly, liver clears ~0.015% per hour (≈8 g for an 80 kg man). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
 </section>
 
 <section>
@@ -269,6 +270,8 @@ function run(){
   $('r-vn').textContent=nameA;$('r-wn').textContent=nameB;
   $('lg-sp').textContent=nameA;$('lg-w').textContent=nameB;$('lg-v1').textContent=A.name;$('lg-w2').textContent=B.name;
   $('lg-wb').style.display=glass?'':'none';
+  $('bacnote').style.display=glass?'none':'';
+  $('bacnote').textContent=glass?'':'One curve on purpose — in "same buzz" mode 10 g of ethanol is 10 g, whatever the drink. Switch to "same servings" to compare a shot against a glass or a bottle.';
   const V=sim(gA,W,r,P,E),Wn=sim(gB,W,r,P,E);
   const len=Math.max(V.bd.length,Wn.bd.length),labels=[];for(let i=0;i<len;i++)labels.push(hhmm(i/6));
   const pad=(arr)=>{const o=arr.slice();while(o.length<len)o.push(0);return o;};
@@ -304,7 +307,7 @@ function run(){
   $('h-wn').textContent=rowName(B);
   $('h-w1').textContent=one(B,v1B);
   $('h-w2').textContent=Math.round(volB)+' ml';$('h-w3').textContent=pctb(volB,B.bottle);$('h-w4').textContent=(B.bottle/v1B).toFixed(1);
-  $('h-note').textContent=glass?'Same number of glasses: one serving of each — '+A.glass+' ml vs '+B.glass+' ml — so the two rows carry different amounts of alcohol.':'Same alcohol: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one drink.';
+  $('h-note').textContent=glass?'Same servings: one serving of each — '+A.glass+' ml vs '+B.glass+' ml — so the two rows carry different amounts of alcohol.':'Same buzz: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one drink.';
   if(!window.Chart)return;
   const base={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false}};
   const x={ticks:{color:MUTED,maxTicksLimit:10,font:{family:'IBM Plex Mono'}},grid:{display:false}};
