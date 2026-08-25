@@ -13,8 +13,8 @@ Same buzz, different bill — an interactive comparison of what a night of drink
 
 ## The model
 
-- Calories: ethanol grams × 7 + sugar/carbs grams × 4. Runs ~5% under printed labels because glycerol and organic acids aren't modeled. Beer numbers reproduce the official per-100 ml labels (1664 Blanc: 40 kcal, Fruits Rouges: 43 kcal).
-- BAC: Widmark estimate — each drink lands instantly, the liver clears ~0.015%/hour. Real absorption is slower on a full stomach and faster on an empty one or with diet mixers.
+- Calories: ethanol grams × 7 + sugar/carbs grams × 4. Runs somewhat under printed labels because glycerol and organic acids aren't modeled — a few percent for sweet or sparkling wines, up to ~15% for dry wines. Beer numbers land close to the official per-100 ml labels (1664 Blanc: 40 kcal exactly, Fruits Rouges: ~41 vs 43 printed).
+- BAC: Widmark estimate — each drink lands instantly, the liver clears ~0.015%/hour (≈8 g of ethanol per hour for an 80 kg man). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers.
 
 This is a rough educational toy, not medical advice. Don't use it to decide whether you can drive.
 

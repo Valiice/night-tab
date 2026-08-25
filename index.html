@@ -95,14 +95,14 @@
   <div class="receipt" aria-live="polite">
     <div class="head">THE NIGHT'S TAB</div>
     <div class="row"><span>Session</span><span id="r-sess">22:00 – 04:00</span></div>
-    <div class="row"><span>Alcohol</span><span id="r-units">6 units · 60 g</span></div>
-    <div class="row" style="margin-top:8px"><span id="r-vn">Vodka + zero soda</span><span id="r-v">420 kcal</span></div>
+    <div class="row"><span>Alcohol</span><span id="r-units">6 drinks · 60 g</span></div>
+    <div class="row" style="margin-top:8px"><span id="r-vn">Vodka / rum + zero soda</span><span id="r-v">420 kcal</span></div>
     <div class="row sub"><span id="r-vs">4.8 × 4 cl shots</span><span></span></div>
-    <div class="row"><span id="r-wn">Sweet pink 6%</span><span id="r-w">720 kcal</span></div>
+    <div class="row"><span id="r-wn">Sweet pink 6%</span><span id="r-w">1104 kcal</span></div>
     <div class="row sub"><span id="r-ws">1.7 bottles</span><span></span></div>
-    <div class="row total big"><span>Peak BAC</span><span id="r-bac">0.03%</span></div>
-    <div class="row sub"><span>Sober at</span><span id="r-sob">~05:40</span></div>
-    <div class="saved"><span id="r-save">VODKA SAVES 300 kcal (42%)</span></div>
+    <div class="row total big"><span>Peak BAC</span><span id="r-bac">0.04%</span></div>
+    <div class="row sub"><span>Sober at</span><span id="r-sob">~05:20</span></div>
+    <div class="saved"><span id="r-save">VODKA / RUM + ZERO SODA SAVES 684 kcal (62%)</span></div>
   </div>
 </header>
 
@@ -134,7 +134,7 @@
 
     <div class="stats">
       <div class="stat"><div class="k">Total alcohol</div><div class="v" id="m1">—</div><div class="s" id="m1b"></div></div>
-      <div class="stat amber"><div class="k" id="m2k">Vodka + zero soda</div><div class="v" id="m2">—</div><div class="s" id="m2b"></div></div>
+      <div class="stat amber"><div class="k" id="m2k">Vodka / rum + zero soda</div><div class="v" id="m2">—</div><div class="s" id="m2b"></div></div>
       <div class="stat rose"><div class="k" id="m3k">Sweet pink 6%</div><div class="v" id="m3">—</div><div class="s" id="m3b"></div></div>
       <div class="stat"><div class="k">Peak BAC</div><div class="v" id="m4">—</div><div class="s" id="m4b"></div></div>
     </div>
@@ -155,10 +155,10 @@
       <tr><td class="n">0.20%+</td><td>Blackout territory, nausea, real risk.</td></tr>
     </table>
     <div>
-      <p style="color:var(--ink-2);margin:0">BAC is blood alcohol concentration: grams of ethanol per 100 ml of blood, shown as a percentage. 0.05% is the same as 0.5 g/L or 0.5‰. The body clears roughly one 10 g drink an hour no matter what — so drinking one an hour keeps you level, and anything faster stacks up. Food, sleep, and body weight all move the curve; coffee and water don't sober you up, they just pass the time.</p>
+      <p style="color:var(--ink-2);margin:0">BAC is blood alcohol concentration: grams of ethanol per 100 ml of blood, shown as a percentage. 0.05% is the same as 0.5 g/L or 0.5‰. The body clears a fixed ~0.015% per hour — about 8 g of ethanol an hour for an 80 kg man, closer to 5 g for a smaller body — so for most people even one 10 g drink an hour slowly stacks up. Food, sleep, and body weight all move the curve; coffee and water don't sober you up, they just pass the time.</p>
     </div>
   </div></div>
-  <p class="note">In "same alcohol" mode the curve is identical for vodka and wine — 10 g of ethanol is 10 g. Switch to "same number of glasses" to see a shot per hour vs a glass per hour. Simple Widmark estimate: each drink lands instantly, liver clears ~0.015% per hour (≈10 g). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
+  <p class="note">In "same alcohol" mode the curve is identical for vodka and wine — 10 g of ethanol is 10 g. Switch to "same number of glasses" to see a shot per hour vs a glass per hour. Simple Widmark estimate: each drink lands instantly, liver clears ~0.015% per hour (≈8 g for an 80 kg man). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
 </section>
 
 <section>
@@ -184,11 +184,11 @@
       <tr><th>Drink</th><th class="n">Alcohol</th><th class="n">kcal</th><th class="n">kcal / unit</th></tr>
       <tr class="hi"><td>Vodka-soda, 4 cl</td><td class="n">12.6 g</td><td class="n">88</td><td class="n">70</td></tr>
       <tr><td>Dry sparkling brut 12%, 150 ml</td><td class="n">14.2 g</td><td class="n">~105</td><td class="n">~75</td></tr>
-      <tr><td>Dry wine 12.5%, 150 ml</td><td class="n">14.8 g</td><td class="n">~125</td><td class="n">~85</td></tr>
+      <tr><td>Dry wine 12.5%, 150 ml</td><td class="n">14.8 g</td><td class="n">~105</td><td class="n">~70</td></tr>
       <tr><td>Light beer 4.2%, 330 ml</td><td class="n">10.9 g</td><td class="n">~95</td><td class="n">~90</td></tr>
       <tr><td>Pils 5%, 330 ml</td><td class="n">13.0 g</td><td class="n">~140</td><td class="n">~110</td></tr>
       <tr><td>Belgian strong beer 8%, 330 ml</td><td class="n">20.8 g</td><td class="n">~230</td><td class="n">~110</td></tr>
-      <tr><td>Sweet pink sparkling 6%, 150 ml</td><td class="n">7.1 g</td><td class="n">~86</td><td class="n">~120</td></tr>
+      <tr><td>Sweet pink sparkling 6% (135 g/L), 150 ml</td><td class="n">7.1 g</td><td class="n">~131</td><td class="n">~185</td></tr>
       <tr><td>Rum and regular coke, 4 cl + 200 ml</td><td class="n">12.6 g</td><td class="n">~170</td><td class="n">~135</td></tr>
     </table>
     <p class="note">A unit = 10 g ethanol (Belgian / Dutch standard). "kcal / unit" is the number that matters: it's what a given buzz costs you, regardless of glass size.</p>
@@ -229,23 +229,26 @@ function loadSettings(){try{const v=JSON.parse(localStorage.getItem(LS));if(!v)r
   if(DRINKS[v.da])$('da').value=v.da;if(DRINKS[v.db])$('db').value=v.db;
   if(MIXERS[v.ma])$('ma').value=v.ma;if(MIXERS[v.mb])$('mb').value=v.mb;
   ['w','p','e','ga','gb'].forEach(k=>{if(v[k]!=null&&!isNaN(+v[k]))$(k).value=v[k];});
+  const snap=(sel,sl,sv)=>{const D=DRINKS[$(sel).value];if(D.kind==='wine'&&(sv==null||isNaN(+sv)))$(sl).value=D.sugar;};
+  snap('da','ga',v.ga);snap('db','gb',v.gb);
   if(v.s==='0.68'||v.s==='0.55')$('s').value=v.s;
   if(v.mode==='glass'){mode='glass';press('c-alc','c-glass',false);}
 }catch(_){}}
 $('reset').onclick=()=>{try{localStorage.removeItem(LS)}catch(_){}location.reload();};
 function sim(g,W,r,P,E){
   const per=g/(W*r)/10,step=1/6,gap=1/P;
-  let bac=0,t=0,next=0,n=0,peak=0,sober=null;const bd=[];
+  let bac=0,t=0,next=0,n=0,peak=0,sober=null;const bd=[],nd=[];
   while(t<=18){
     while(next<=t+1e-9&&next<E-1e-9){bac+=per;n++;next+=gap;}
-    bac=Math.max(0,bac-0.015*step);
     if(bac>peak)peak=bac;
-    if(n>0&&bac<=0&&sober===null)sober=t;
-    bd.push(+bac.toFixed(4));
+    bac=Math.max(0,bac-0.015*step);
+    // sober = BAC back to 0 with no drinks still coming; zeros between drinks don't count
+    if(n>0&&bac<=0&&next>=E-1e-9&&sober===null)sober=t;
+    bd.push(+bac.toFixed(4));nd.push(n);
     if(sober!==null&&t>sober+0.5)break;
     t+=step;
   }
-  return{bd,n,peak,sober};
+  return{bd,nd,n,peak,sober};
 }
 function run(){
   const W=+$('w').value,P=+$('p').value,E=+$('e').value,r=+$('s').value;
@@ -272,10 +275,11 @@ function run(){
   const n=V.n, ethA=n*gA, ethB=n*gB;
   const volA=ethA/0.789/A.abv, volB=ethB/0.789/B.abv;
   const perK=(g,D,sug,mix)=>g*7+(g/0.789/D.abv)*sug/1000*4+(mix?2*mix.kcal:0);
-  const kcalA=Math.round(perK(gA,A,sugA,mixA)*n), kcalB=Math.round(perK(gB,B,sugB,mixB)*n);
-  const kv=[],kw=[];{let next=0,cnt=0;for(let i=0;i<len;i++){const t=i/6;while(next<=t+1e-9&&next<E-1e-9){cnt++;next+=1/P;}kv.push(Math.round(cnt*perK(gA,A,sugA,mixA)));kw.push(Math.round(cnt*perK(gB,B,sugB,mixB)));}}
+  const kA=perK(gA,A,sugA,mixA), kB=perK(gB,B,sugB,mixB);
+  const kcalA=Math.round(kA*n), kcalB=Math.round(kB*n);
+  const kv=[],kw=[];for(let i=0;i<len;i++){const cnt=i<V.nd.length?V.nd[i]:V.n;kv.push(Math.round(cnt*kA));kw.push(Math.round(cnt*kB));}
   const save=kcalB-kcalA,costlier=Math.max(kcalA,kcalB),pct=costlier?Math.round(Math.abs(save)/costlier*100):0;
-  const desc=(D,vol)=>D.kind==='spirit'?(vol/40).toFixed(1)+' × 4 cl shots':(vol/D.bottle).toFixed(1)+' bottles';
+  const desc=(D,vol)=>D.kind==='spirit'?(vol/D.glass).toFixed(1)+' × '+(D.glass/10)+' cl shots':(vol/D.bottle).toFixed(1)+' bottles';
   const descA=desc(A,volA),descB=desc(B,volB);
   const sob=x=>x===null?'>16:00':'~'+hhmm(x);
   $('m1').textContent=n+' drinks';$('m1b').textContent=glass?Math.round(ethA)+' g / '+Math.round(ethB)+' g ethanol · '+E+' h':(n*10)+' g ethanol · '+E+' h';
@@ -288,7 +292,7 @@ function run(){
   $('r-w').textContent=kcalB+' kcal';$('r-ws').textContent=descB;
   $('r-bac').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
   $('r-sob').textContent=glass?sob(V.sober)+' / '+sob(Wn.sober):sob(V.sober);
-  const kd=kw.map((v,i)=>v-kv[i]);$('lg-pct').textContent=(save>=0?nameA:nameB)+' '+Math.abs(pct)+'% cheaper, '+Math.abs(save)+' kcal by the end';
+  const kd=kw.map((v,i)=>Math.abs(v-kv[i]));$('lg-pct').textContent=(save>=0?nameA:nameB)+' '+Math.abs(pct)+'% cheaper, '+Math.abs(save)+' kcal by the end';
   $('r-save').textContent=(save>=0?nameA:nameB).toUpperCase()+' SAVES '+Math.abs(save)+' kcal ('+Math.abs(pct)+'%)';
   const v1A=gA/0.789/A.abv, v1B=gB/0.789/B.abv;
   const pctb=(ml,b)=>Math.round(ml/b*100)+'%';
