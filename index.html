@@ -46,6 +46,8 @@
   .slot.rose .slot-h{color:var(--rose)}
   .slot>div{margin-top:14px}
   .slot select{background:var(--bar)}
+  .resetbtn{background:var(--bar-2);border:1px solid var(--line);border-radius:8px;color:var(--ink-2);font:inherit;font-family:var(--mono);font-size:12px;padding:6px 12px;cursor:pointer}
+  .resetbtn:hover{color:var(--ink);border-color:var(--ink-3)}
   label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:6px}
   .val{font-family:var(--mono);color:var(--ink);float:right}
   input[type=range]{width:100%;accent-color:var(--amber);margin:0}
@@ -105,7 +107,7 @@
 </header>
 
 <section>
-  <h2>Set the night</h2>
+  <h2 style="display:flex;justify-content:space-between;align-items:center">Set the night <button id="reset" class="resetbtn" title="Back to defaults">↺ reset</button></h2>
   <div class="panel">
     <div class="controls">
       <div><label>Body weight <span class="val" id="wo">80 kg</span></label><input type="range" id="w" min="40" max="140" step="1" value="80"></div>
@@ -221,6 +223,16 @@ $('c-alc').onclick=()=>setMode('alc');$('c-glass').onclick=()=>setMode('glass');
 $('da').addEventListener('change',()=>{const D=DRINKS[$('da').value];if(D.kind==='wine')$('ga').value=D.sugar;run();});
 $('db').addEventListener('change',()=>{const D=DRINKS[$('db').value];if(D.kind==='wine')$('gb').value=D.sugar;run();});
 $('ma').addEventListener('change',run);$('mb').addEventListener('change',run);
+const LS='night-tab-settings';
+function saveSettings(){try{localStorage.setItem(LS,JSON.stringify({w:$('w').value,p:$('p').value,e:$('e').value,s:$('s').value,da:$('da').value,ma:$('ma').value,ga:$('ga').value,db:$('db').value,mb:$('mb').value,gb:$('gb').value,mode}))}catch(_){}}
+function loadSettings(){try{const v=JSON.parse(localStorage.getItem(LS));if(!v)return;
+  if(DRINKS[v.da])$('da').value=v.da;if(DRINKS[v.db])$('db').value=v.db;
+  if(MIXERS[v.ma])$('ma').value=v.ma;if(MIXERS[v.mb])$('mb').value=v.mb;
+  ['w','p','e','ga','gb'].forEach(k=>{if(v[k]!=null&&!isNaN(+v[k]))$(k).value=v[k];});
+  if(v.s==='0.68'||v.s==='0.55')$('s').value=v.s;
+  if(v.mode==='glass'){mode='glass';press('c-alc','c-glass',false);}
+}catch(_){}}
+$('reset').onclick=()=>{try{localStorage.removeItem(LS)}catch(_){}location.reload();};
 function sim(g,W,r,P,E){
   const per=g/(W*r)/10,step=1/6,gap=1/P;
   let bac=0,t=0,next=0,n=0,peak=0,sober=null;const bd=[];
@@ -239,6 +251,7 @@ function run(){
   const W=+$('w').value,P=+$('p').value,E=+$('e').value,r=+$('s').value;
   const A=DRINKS[$('da').value],B=DRINKS[$('db').value];
   const glass=mode==='glass';
+  saveSettings();
   $('mwa').style.display=A.kind==='spirit'?'':'none';$('mwb').style.display=B.kind==='spirit'?'':'none';
   $('gwa').style.display=A.kind==='wine'?'':'none';$('gwb').style.display=B.kind==='wine'?'':'none';
   const sugA=A.kind==='wine'?+$('ga').value:A.sugar, sugB=B.kind==='wine'?+$('gb').value:B.sugar;
@@ -288,6 +301,7 @@ function run(){
   $('h-w1').textContent=one(B,v1B);
   $('h-w2').textContent=Math.round(volB)+' ml';$('h-w3').textContent=pctb(volB,B.bottle);$('h-w4').textContent=(B.bottle/v1B).toFixed(1);
   $('h-note').textContent=glass?'Same number of glasses: one serving of each — '+A.glass+' ml vs '+B.glass+' ml — so the two rows carry different amounts of alcohol.':'Same alcohol: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one drink.';
+  if(!window.Chart)return;
   const base={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false}};
   const x={ticks:{color:MUTED,maxTicksLimit:10,font:{family:'IBM Plex Mono'}},grid:{display:false}};
   const lim=labels.map(()=>0.05),nov=labels.map(()=>0.02);
@@ -302,6 +316,7 @@ function run(){
   else ch2=new Chart($('c2'),{type:'line',data:{labels,datasets:[{label:nameA,data:kv,borderColor:AMBER,borderWidth:2,pointRadius:0,stepped:true},{label:nameB,data:kw,borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,stepped:true},{label:'Difference',data:kd,borderColor:MUTED,borderWidth:2,pointRadius:0,stepped:true}]},options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v+' kcal',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
 }
 ['w','p','e','s','ga','gb'].forEach(id=>$(id).addEventListener('input',run));
+loadSettings();
 run();
 </script>
 </body>
