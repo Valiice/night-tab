@@ -273,12 +273,14 @@ function run(){
   $('lg-sp').textContent=nameA;$('lg-w').textContent=nameB;$('lg-v1').textContent=A.name;$('lg-w2').textContent=B.name;
   $('lg-wb').style.display=glass?'':'none';
   $('bacnote').style.display=glass?'none':'';
-  $('bacnote').textContent=glass?'':'One curve on purpose — in "same buzz" mode 10 g of ethanol is 10 g, whatever the drink. Switch to "same servings" to compare a shot against a glass or a bottle.';
   const V=sim(gA,W,r,P,E),Wn=sim(gB,W,r,P,E);
   const len=Math.max(V.bd.length,Wn.bd.length),labels=[];for(let i=0;i<len;i++)labels.push(hhmm(i/6));
   const pad=(arr)=>{const o=arr.slice();while(o.length<len)o.push(0);return o;};
   const n=V.n, ethA=n*gA, ethB=n*gB;
   const volA=ethA/0.789/A.abv, volB=ethB/0.789/B.abv;
+  const sword=D=>D.kind==='spirit'?'shots':D.kind==='wine'?'glasses':'bottles';
+  const eq=D=>((n*10)/(D.glass*D.abv*0.789)).toFixed(1)+' '+sword(D)+' ('+D.glass+' ml) of '+D.name;
+  if(!glass)$('bacnote').textContent='One curve on purpose — 10 g of ethanol is 10 g, whatever the drink. Tonight’s '+(n*10)+' g is '+eq(A)+' or '+eq(B)+'. Switch to “same servings” to compare real pours instead.';
   const perK=(g,D,sug,mix)=>g*7+(g/0.789/D.abv)*sug/1000*4+(mix?2*mix.kcal:0);
   const kA=perK(gA,A,sugA,mixA), kB=perK(gB,B,sugB,mixB);
   const kcalA=Math.round(kA*n), kcalB=Math.round(kB*n);
