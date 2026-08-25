@@ -160,7 +160,7 @@
       </div>
     </div>
 
-    <div class="note" style="margin-top:16px"><div id="pm1"></div><div id="pm2" style="margin-top:4px"></div></div>
+    <div class="warn" style="font-size:13px"><div id="pm1"></div><div id="pm2" style="margin-top:6px"></div></div>
 
     <div class="stats">
       <div class="stat"><div class="k">Total alcohol</div><div class="v" id="m1">—</div><div class="s" id="m1b"></div></div>
@@ -367,7 +367,7 @@ function run(){
   const desc=(D,vol)=>D.kind==='spirit'?(vol/D.glass).toFixed(1)+' × '+(D.glass/10)+' cl shots':(vol/D.bottle).toFixed(1)+' bottles';
   const descA=desc(A,volA),descB=desc(B,volB);
   const sob=x=>x===null?'>'+hhmm(18):'~'+hhmm(x);
-  $('m1').textContent=n+' rounds';$('m1b').textContent=glass?'one full serving each · '+Math.round(ethA)+' / '+Math.round(ethB)+' g · '+E+' h':'10 g pour each · '+(n*10)+' g total · '+E+' h';
+  $('m1').textContent=n+' rounds';$('m1b').textContent=glass?'full servings · '+Math.round(ethA)+' / '+Math.round(ethB)+' g · '+E+' h':'10 g pours · '+(n*10)+' g total · '+E+' h';
   $('m2').textContent=kcalA+' kcal';$('m2b').textContent=Math.round(volA)+' ml = '+descA+(glass?' · peak '+V.peak.toFixed(2)+'%':' · '+Math.round(kcalA/n)+' kcal/unit');
   $('m3').textContent=kcalB+' kcal';$('m3b').textContent=Math.round(volB)+' ml = '+descB+(glass?' · peak '+Wn.peak.toFixed(2)+'%':' · '+Math.round(kcalB/n)+' kcal/unit');
   $('m4').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
@@ -376,6 +376,7 @@ function run(){
   $('r-v').textContent=kcalA+' kcal';$('r-vs').textContent=descA;
   $('r-w').textContent=kcalB+' kcal';$('r-ws').textContent=descB;
   $('r-bac').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
+  $('r-bac').style.fontSize=glass?'15px':'';
   $('r-sob').textContent=glass?sob(V.sober)+' / '+sob(Wn.sober):sob(V.sober);
   const kd=kw.map((v,i)=>Math.abs(v-kv[i]));$('lg-pct').textContent=(save>=0?nameA:nameB)+' '+Math.abs(pct)+'% cheaper, '+Math.abs(save)+' kcal by the end';
   $('r-save').textContent=(save>=0?nameA:nameB).toUpperCase()+' SAVES '+Math.abs(save)+' kcal ('+Math.abs(pct)+'%)';
