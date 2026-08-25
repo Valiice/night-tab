@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The night's tab — alcohol vs calories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0F1420; --bar:#171E2E; --bar-2:#1F2739; --line:#2A3448;
+    --ink:#ECE9E1; --ink-2:#A9AFBD; --ink-3:#6E7585;
+    --amber:#E8A33D; --amber-deep:#A86B12; --rose:#E27AA0; --rose-deep:#9B3F62;
+    --mono:"IBM Plex Mono",ui-monospace,monospace; --sans:"IBM Plex Sans",system-ui,sans-serif; --disp:"Bricolage Grotesque",var(--sans);
+  }
+  *{box-sizing:border-box}
+  html{background:var(--night);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55}
+  body{margin:0;max-width:1080px;padding:32px 20px 80px;margin-inline:auto}
+  a{color:var(--amber)}
+  h1,h2,h3{font-family:var(--disp);font-weight:800;margin:0;letter-spacing:-.02em;line-height:1.05}
+  h1{font-size:clamp(40px,7vw,76px);font-variation-settings:"opsz" 96}
+  h2{font-size:22px;font-weight:600;margin-bottom:12px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .lede{color:var(--ink-2);max-width:56ch;margin:16px 0 0;font-size:18px}
+  header{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:40px}
+  @media(max-width:760px){header{grid-template-columns:1fr}}
+
+  /* the receipt — signature element */
+  .receipt{background:#F3EFE4;color:#1A1A1A;font-family:var(--mono);font-size:13px;width:300px;padding:22px 20px 26px;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.45)}
+  .receipt:after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:10px;background:linear-gradient(135deg,transparent 50%,#F3EFE4 50%) 0 0/20px 10px,linear-gradient(225deg,transparent 50%,#F3EFE4 50%) 0 0/20px 10px;background-repeat:repeat-x}
+  .receipt .head{text-align:center;border-bottom:1px dashed #999;padding-bottom:10px;margin-bottom:10px;font-weight:500;letter-spacing:.1em}
+  .receipt .row{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+  .receipt .row.sub{color:#666;font-size:12px}
+  .receipt .total{border-top:1px dashed #999;margin-top:10px;padding-top:10px;font-weight:500}
+  .receipt .big{font-size:20px}
+  .receipt .saved{background:#1A1A1A;color:#F3EFE4;margin:12px -20px -26px;padding:12px 20px;text-align:center}
+
+  section{margin-top:44px}
+  .panel{background:var(--bar);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px 24px}
+  label{display:block;font-size:13px;color:var(--ink-2);margin-bottom:6px}
+  .val{font-family:var(--mono);color:var(--ink);float:right}
+  input[type=range]{width:100%;accent-color:var(--amber);margin:0}
+  select,input[type=number]{width:100%;background:var(--bar-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;font-family:var(--mono);font-size:14px}
+  select:focus,input:focus{outline:2px solid var(--amber);outline-offset:1px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{flex:1;background:var(--bar-2);color:var(--ink-2);border:0;padding:9px 6px;font:inherit;font-size:14px;cursor:pointer}
+  .seg button[aria-pressed=true]{background:var(--rose);color:#2A0B18;font-weight:500}
+  .seg button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:20px}
+  .stat{background:var(--bar-2);border-radius:10px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono)}
+  .stat .v{font-family:var(--disp);font-size:30px;font-weight:600;letter-spacing:-.02em;margin-top:4px}
+  .stat .s{font-size:13px;color:var(--ink-2)}
+  .stat.amber .v{color:var(--amber)} .stat.rose .v{color:var(--rose)}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin:6px 0 8px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .chart{position:relative;height:280px}
+  .chart.short{height:230px}
+
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;color:var(--ink-3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;font-weight:400}
+  td.n,th.n{text-align:right;font-family:var(--mono)}
+  tr.hi td{color:var(--amber)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+  ul{padding-left:18px;color:var(--ink-2)} li{margin:6px 0} li b{color:var(--ink);font-weight:500}
+  .note{font-size:13px;color:var(--ink-3);margin-top:14px}
+  .warn{border-left:3px solid var(--amber);padding:6px 14px;color:var(--ink-2);margin-top:20px}
+  @media(prefers-reduced-motion:no-preference){.stat .v{transition:color .2s}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="eyebrow">Alcohol vs calories · one evening at home</div>
+    <h1>Same buzz.<br>Different bill.</h1>
+    <p class="lede">Pure ethanol is 7 kcal per gram — that's the floor, and vodka in a zero-calorie mixer sits on it. Everything else is that plus sugar. Set the evening below and see what it costs.</p>
+  </div>
+  <div class="receipt" aria-live="polite">
+    <div class="head">THE NIGHT'S TAB</div>
+    <div class="row"><span>Session</span><span id="r-sess">22:00 – 04:00</span></div>
+    <div class="row"><span>Alcohol</span><span id="r-units">6 units · 60 g</span></div>
+    <div class="row" style="margin-top:8px"><span>Vodka + zero soda</span><span id="r-v">420 kcal</span></div>
+    <div class="row sub"><span id="r-vs">4.8 × 4 cl shots</span><span></span></div>
+    <div class="row"><span id="r-wn">Sweet pink 6%</span><span id="r-w">720 kcal</span></div>
+    <div class="row sub"><span id="r-ws">1.7 bottles</span><span></span></div>
+    <div class="row total big"><span>Peak BAC</span><span id="r-bac">0.03%</span></div>
+    <div class="row sub"><span>Sober at</span><span id="r-sob">~05:40</span></div>
+    <div class="saved"><span id="r-save">VODKA SAVES 300 kcal (42%)</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>Set the night</h2>
+  <div class="panel">
+    <div class="controls">
+      <div><label>Body weight <span class="val" id="wo">80 kg</span></label><input type="range" id="w" min="40" max="140" step="1" value="80"></div>
+      <div><label>Drinks per hour <span class="val" id="po">1.0</span></label><input type="range" id="p" min="0.5" max="3" step="0.25" value="1"><div class="note" style="margin-top:4px" id="pnote">1 drink = 10 g ethanol (1 unit) for both</div></div>
+      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same alcohol</button><button id="c-glass" aria-pressed="false">Same number of glasses</button></div><div class="note" style="margin-top:4px" id="cnote">A 4 cl shot vs a 150 ml glass — different amounts of alcohol per serving.</div></div>
+      <div><label>Stop drinking at <span class="val" id="eo">04:00</span></label><input type="range" id="e" min="1" max="10" step="0.5" value="6"><div class="note" style="margin-top:4px">starting at 22:00 · slide from 23:00 to 08:00</div></div>
+      <div><label>Body type (Widmark r)</label><select id="s"><option value="0.68">Male · 0.68</option><option value="0.55">Female · 0.55</option></select></div>
+      <div><label>The wine</label><div class="seg" role="group" aria-label="Wine type"><button id="w-sweet" aria-pressed="true">Sweet pink 6%</button><button id="w-brut" aria-pressed="false">Brut pink 12%</button></div></div>
+      <div><label>How sweet is the wine? <span class="val" id="go"></span></label><input type="range" id="g" min="0" max="120" step="5" value="60"><div class="note" style="margin-top:4px">Sugar left in the wine after fermentation. See the label table below: brut ≈ 0–12 g per litre, a sweet 6% sparkling ≈ 50–100.</div></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Total alcohol</div><div class="v" id="m1">—</div><div class="s" id="m1b"></div></div>
+      <div class="stat amber"><div class="k">Vodka + zero soda</div><div class="v" id="m2">—</div><div class="s" id="m2b"></div></div>
+      <div class="stat rose"><div class="k" id="m3k">Sweet pink 6%</div><div class="v" id="m3">—</div><div class="s" id="m3b"></div></div>
+      <div class="stat"><div class="k">Peak BAC</div><div class="v" id="m4">—</div><div class="s" id="m4b"></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>How drunk, when</h2>
+  <div class="legend"><span><i class="sw" style="background:var(--amber)"></i>BAC on vodka</span><span id="lg-wb"><i class="sw" style="background:var(--rose)"></i>BAC on <span id="lg-w2">wine</span></span><span><i class="sw" style="background:transparent;border-top:2px dashed var(--ink-3);height:0"></i>0.05% — French driving limit (0.5 g/L)</span><span><i class="sw" style="background:transparent;border-top:2px dotted var(--ink-3);height:0"></i>0.02% — novice drivers (0.2 g/L)</span></div>
+  <div class="chart"><canvas id="c1" role="img" aria-label="Estimated blood alcohol percentage through the night"></canvas></div>
+  <div style="margin-top:20px"><div class="two">
+    <table>
+      <tr><th>BAC</th><th>Roughly how it feels</th></tr>
+      <tr><td class="n">0.02%</td><td>Slightly relaxed. French novice-driver limit.</td></tr>
+      <tr><td class="n">0.05%</td><td>Clear buzz, chattier, judgement starting to slip. French driving limit.</td></tr>
+      <tr><td class="n">0.08%</td><td>Properly drunk: coordination and reaction time noticeably off.</td></tr>
+      <tr><td class="n">0.10–0.15%</td><td>Slurring, clumsy, memory gaps start.</td></tr>
+      <tr><td class="n">0.20%+</td><td>Blackout territory, nausea, real risk.</td></tr>
+    </table>
+    <div>
+      <p style="color:var(--ink-2);margin:0">BAC is blood alcohol concentration: grams of ethanol per 100 ml of blood, shown as a percentage. 0.05% is the same as 0.5 g/L or 0.5‰. The body clears roughly one 10 g drink an hour no matter what — so drinking one an hour keeps you level, and anything faster stacks up. Food, sleep, and body weight all move the curve; coffee and water don't sober you up, they just pass the time.</p>
+    </div>
+  </div></div>
+  <p class="note">In "same alcohol" mode the curve is identical for vodka and wine — 10 g of ethanol is 10 g. Switch to "same number of glasses" to see a shot per hour vs a glass per hour. Simple Widmark estimate: each drink lands instantly, liver clears ~0.015% per hour (≈10 g). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
+</section>
+
+<section>
+  <h2>What it costs, as the night goes on</h2>
+  <div class="legend"><span><i class="sw" style="background:var(--amber)"></i>Vodka + zero soda</span><span><i class="sw" style="background:var(--rose)"></i><span id="lg-w">Sweet pink 6%</span></span><span><i class="sw" style="background:var(--ink-3)"></i>Difference · <span id="lg-pct">—</span></span></div>
+  <div class="chart short"><canvas id="c2" role="img" aria-label="Cumulative calories for vodka-soda versus wine through the night"></canvas></div>
+</section>
+
+<section>
+  <h2>What that looks like at home</h2>
+  <table>
+    <tr><th>Bottle</th><th class="n">1 drink</th><th class="n">Tonight</th><th class="n">Of the bottle</th><th class="n">Drinks per bottle</th></tr>
+    <tr class="hi"><td>Vodka 40%, 70 cl</td><td class="n" id="h-v1">—</td><td class="n" id="h-v2">—</td><td class="n" id="h-v3">—</td><td class="n" id="h-v4">—</td></tr>
+    <tr><td id="h-wn">Wine, 75 cl</td><td class="n" id="h-w1">—</td><td class="n" id="h-w2">—</td><td class="n" id="h-w3">—</td><td class="n" id="h-w4">—</td></tr>
+  </table>
+  <p class="note" id="h-note"></p>
+</section>
+
+<section class="two">
+  <div>
+    <h2>Per glass</h2>
+    <table>
+      <tr><th>Drink</th><th class="n">Alcohol</th><th class="n">kcal</th><th class="n">kcal / unit</th></tr>
+      <tr class="hi"><td>Vodka-soda, 4 cl</td><td class="n">12.6 g</td><td class="n">88</td><td class="n">70</td></tr>
+      <tr><td>Dry sparkling brut 12%, 150 ml</td><td class="n">14.2 g</td><td class="n">~105</td><td class="n">~75</td></tr>
+      <tr><td>Dry wine 12.5%, 150 ml</td><td class="n">14.8 g</td><td class="n">~125</td><td class="n">~85</td></tr>
+      <tr><td>Light beer 4.2%, 330 ml</td><td class="n">10.9 g</td><td class="n">~95</td><td class="n">~90</td></tr>
+      <tr><td>Pils 5%, 330 ml</td><td class="n">13.0 g</td><td class="n">~140</td><td class="n">~110</td></tr>
+      <tr><td>Belgian strong beer 8%, 330 ml</td><td class="n">20.8 g</td><td class="n">~230</td><td class="n">~110</td></tr>
+      <tr><td>Sweet pink sparkling 6%, 150 ml</td><td class="n">7.1 g</td><td class="n">~86</td><td class="n">~120</td></tr>
+      <tr><td>Rum and regular coke, 4 cl + 200 ml</td><td class="n">12.6 g</td><td class="n">~170</td><td class="n">~135</td></tr>
+    </table>
+    <p class="note">A unit = 10 g ethanol (Belgian / Dutch standard). "kcal / unit" is the number that matters: it's what a given buzz costs you, regardless of glass size.</p>
+  </div>
+  <div>
+    <h2>Reading the sweetness off a label</h2>
+    <table>
+      <tr><th>Sparkling wine says</th><th class="n">Sugar g/L</th></tr>
+      <tr class="hi"><td>Brut nature / zero dosage</td><td class="n">0–3</td></tr>
+      <tr class="hi"><td>Extra brut</td><td class="n">0–6</td></tr>
+      <tr class="hi"><td>Brut</td><td class="n">&lt; 12</td></tr>
+      <tr><td>Extra dry / extra sec</td><td class="n">12–17</td></tr>
+      <tr><td>Sec / dry</td><td class="n">17–32</td></tr>
+      <tr><td>Demi-sec</td><td class="n">32–50</td></tr>
+      <tr><td>Doux / sweet</td><td class="n">50+</td></tr>
+    </table>
+    <p class="note">Still wines use dry / off-dry / medium / sweet (or trocken / halbtrocken / lieblich / süß). If the label says nothing, the alcohol % is the tell: a sparkling at 5–7% stopped fermenting early and kept its sugar — assume 50–100 g/L. Since 2023, EU wine labels must list kcal per 100 ml, often behind a QR code; that's the exact number to use.</p>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const AMBER='#E8A33D',ROSE='#E27AA0',MUTED='#6E7585',GRID='#232C3E';
+let wine='sweet',mode='alc',ch1,ch2;
+const hhmm=h=>{const t=(22+h)%24,hh=Math.floor(t),mm=Math.round((t-hh)*60);return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
+const press=(a,b,on)=>{$(a).setAttribute('aria-pressed',on);$(b).setAttribute('aria-pressed',!on);};
+function setWine(k){wine=k;press('w-sweet','w-brut',k==='sweet');$('g').value=k==='sweet'?60:8;run();}
+function setMode(k){mode=k;press('c-alc','c-glass',k==='alc');run();}
+$('w-sweet').onclick=()=>setWine('sweet');$('w-brut').onclick=()=>setWine('brut');
+$('c-alc').onclick=()=>setMode('alc');$('c-glass').onclick=()=>setMode('glass');
+function sim(g,W,r,P,E){
+  const per=g/(W*r)/10,step=1/6,gap=1/P;
+  let bac=0,t=0,next=0,n=0,peak=0,sober=null;const bd=[];
+  while(t<=18){
+    while(next<=t+1e-9&&next<E-1e-9){bac+=per;n++;next+=gap;}
+    bac=Math.max(0,bac-0.015*step);
+    if(bac>peak)peak=bac;
+    if(n>0&&bac<=0&&sober===null)sober=t;
+    bd.push(+(bac*100).toFixed(3));
+    if(sober!==null&&t>sober+0.5)break;
+    t+=step;
+  }
+  return{bd,n,peak,sober};
+}
+function run(){
+  const W=+$('w').value,P=+$('p').value,E=+$('e').value,r=+$('s').value,G=+$('g').value;
+  const abv=wine==='sweet'?0.06:0.12,wname=wine==='sweet'?'Sweet pink 6%':'Brut pink 12%';
+  const glass=mode==='glass';
+  const gV=glass?40*0.4*0.789:10, gW=glass?150*abv*0.789:10;
+  const sweet=G<=12?'dry':G<=30?'off-dry':G<=50?'medium':'sweet';
+  $('wo').textContent=W+' kg';$('po').textContent=P.toFixed(2).replace(/0$/,'');$('eo').textContent=hhmm(E);$('go').textContent=sweet+' · '+G+' g/L';
+  $('pnote').textContent=glass?'1 drink = one 4 cl shot (12.6 g) or one 150 ml glass ('+gW.toFixed(1)+' g)':'1 drink = 10 g ethanol (1 unit) for both';
+  $('m3k').textContent=wname;$('lg-w').textContent=wname;$('lg-w2').textContent=wname;$('r-wn').textContent=wname;
+  $('lg-wb').style.display=glass?'':'none';
+  const V=sim(gV,W,r,P,E),Wn=sim(gW,W,r,P,E);
+  const len=Math.max(V.bd.length,Wn.bd.length),labels=[];for(let i=0;i<len;i++)labels.push(hhmm(i/6));
+  const pad=(arr)=>{const o=arr.slice();while(o.length<len)o.push(0);return o;};
+  const n=V.n, ethV=n*gV, ethW=n*gW;
+  const kcalV=Math.round(ethV*7), kcalW=Math.round(ethW*7+(ethW/0.789/abv)*G/1000*4);
+  const kv=[],kw=[];let c=0;const per1=len/1;{let next=0,cnt=0;for(let i=0;i<len;i++){const t=i/6;while(next<=t+1e-9&&next<E-1e-9){cnt++;next+=1/P;}kv.push(Math.round(cnt*gV*7));kw.push(Math.round(cnt*(gW*7+(gW/0.789/abv)*G/1000*4)));}}
+  const save=kcalW-kcalV,pct=kcalW?Math.round(save/kcalW*100):0;
+  const shots=(ethV/0.789/0.4/40).toFixed(1),bottles=(ethW/0.789/abv/750).toFixed(1);
+  const sob=x=>x===null?'>16:00':'~'+hhmm(x);
+  $('m1').textContent=n+' drinks';$('m1b').textContent=glass?Math.round(ethV)+' g on vodka · '+Math.round(ethW)+' g on wine':(n*10)+' g ethanol · '+E+' h';
+  $('m2').textContent=kcalV+' kcal';$('m2b').textContent=Math.round(ethV/0.789/0.4)+' ml = '+shots+' × 4 cl · peak '+(V.peak*100).toFixed(2)+'%';
+  $('m3').textContent=kcalW+' kcal';$('m3b').textContent=bottles+' bottles'+(glass?' · peak '+(Wn.peak*100).toFixed(2)+'%':' · '+Math.round(kcalW/n)+' kcal/unit');
+  $('m4').textContent=glass?(V.peak*100).toFixed(2)+'% / '+(Wn.peak*100).toFixed(2)+'%':(V.peak*100).toFixed(2)+'%';
+  $('m4b').textContent=glass?'vodka / wine · sober '+sob(V.sober)+' / '+sob(Wn.sober):'sober '+sob(V.sober);
+  $('r-sess').textContent='22:00 – '+hhmm(E);$('r-units').textContent=n+' drinks · '+(glass?Math.round(ethV)+' / '+Math.round(ethW):n*10)+' g';
+  $('r-v').textContent=kcalV+' kcal';$('r-vs').textContent=shots+' × 4 cl shots';
+  $('r-w').textContent=kcalW+' kcal';$('r-ws').textContent=bottles+' bottles';
+  $('r-bac').textContent=glass?(V.peak*100).toFixed(2)+'% / '+(Wn.peak*100).toFixed(2)+'%':(V.peak*100).toFixed(2)+'%';
+  $('r-sob').textContent=glass?sob(V.sober)+' / '+sob(Wn.sober):sob(V.sober);
+  const kd=kw.map((v,i)=>v-kv[i]);$('lg-pct').textContent=(save>=0?'vodka ':'wine ')+Math.abs(pct)+'% cheaper, '+Math.abs(save)+' kcal by the end';
+  $('r-save').textContent=(save>=0?'VODKA SAVES ':'WINE SAVES ')+Math.abs(save)+' kcal ('+Math.abs(pct)+'%)';
+  const v1=gV/0.789/0.4, w1=gW/0.789/abv, vT=ethV/0.789/0.4, wT=ethW/0.789/abv;
+  const pctb=(ml,b)=>Math.round(ml/b*100)+'%';
+  $('h-v1').textContent=(v1/10).toFixed(1)+' cl · '+Math.round(v1/15*10)/10+' tbsp';
+  $('h-v2').textContent=Math.round(vT)+' ml';$('h-v3').textContent=pctb(vT,700);$('h-v4').textContent=Math.round(700/v1);
+  $('h-wn').textContent=wname+', 75 cl';
+  $('h-w1').textContent=Math.round(w1)+' ml · '+(w1/150).toFixed(1)+' glasses';
+  $('h-w2').textContent=Math.round(wT)+' ml';$('h-w3').textContent=pctb(wT,750);$('h-w4').textContent=(750/w1).toFixed(1);
+  $('h-note').textContent=glass?'Same number of glasses: a drink is one 4 cl shot or one 150 ml glass, so the two rows carry different amounts of alcohol.':'Same alcohol: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of vodka is one drink.';
+  const base={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false}};
+  const x={ticks:{color:MUTED,maxTicksLimit:10,font:{family:'IBM Plex Mono'}},grid:{display:false}};
+  const lim=labels.map(()=>0.05),nov=labels.map(()=>0.02);
+  if(ch1){ch1.data.labels=labels;ch1.data.datasets[0].data=pad(V.bd);ch1.data.datasets[1].data=pad(Wn.bd);ch1.data.datasets[1].hidden=!glass;ch1.data.datasets[1].label=wname;ch1.data.datasets[2].data=lim;ch1.data.datasets[3].data=nov;ch1.update();}
+  else ch1=new Chart($('c1'),{type:'line',data:{labels,datasets:[
+    {label:'Vodka',data:pad(V.bd),borderColor:AMBER,backgroundColor:'rgba(232,163,61,.12)',fill:true,borderWidth:2,pointRadius:0,tension:.2},
+    {label:wname,data:pad(Wn.bd),borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,tension:.2,hidden:!glass},
+    {label:'Limit 0.5 g/L',data:lim,borderColor:MUTED,borderDash:[4,4],borderWidth:1,pointRadius:0},
+    {label:'Novice 0.2 g/L',data:nov,borderColor:MUTED,borderDash:[2,3],borderWidth:1,pointRadius:0}]},
+    options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v.toFixed(2)+'%',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
+  if(ch2){ch2.data.labels=labels;ch2.data.datasets[0].data=kv;ch2.data.datasets[1].data=kw;ch2.data.datasets[1].label=wname;ch2.data.datasets[2].data=kd;ch2.update();}
+  else ch2=new Chart($('c2'),{type:'line',data:{labels,datasets:[{label:'Vodka + zero soda',data:kv,borderColor:AMBER,borderWidth:2,pointRadius:0,stepped:true},{label:wname,data:kw,borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,stepped:true},{label:'Difference',data:kd,borderColor:MUTED,borderWidth:2,pointRadius:0,stepped:true}]},options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v+' kcal',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
+}
+['w','p','e','s','g'].forEach(id=>$(id).addEventListener('input',run));
+run();
+</script>
+</body>
+</html>
