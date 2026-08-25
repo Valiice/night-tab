@@ -95,14 +95,14 @@
   <div class="receipt" aria-live="polite">
     <div class="head">THE NIGHT'S TAB</div>
     <div class="row"><span>Session</span><span id="r-sess">22:00 – 04:00</span></div>
-    <div class="row"><span>Alcohol</span><span id="r-units">6 drinks · 60 g</span></div>
-    <div class="row" style="margin-top:8px"><span id="r-vn">Vodka / rum + zero soda</span><span id="r-v">420 kcal</span></div>
-    <div class="row sub"><span id="r-vs">4.8 × 4 cl shots</span><span></span></div>
-    <div class="row"><span id="r-wn">Sweet pink 6%</span><span id="r-w">1104 kcal</span></div>
-    <div class="row sub"><span id="r-ws">1.7 bottles</span><span></span></div>
-    <div class="row total big"><span>Peak BAC</span><span id="r-bac">0.04%</span></div>
-    <div class="row sub"><span>Sober at</span><span id="r-sob">~05:20</span></div>
-    <div class="saved"><span id="r-save">VODKA / RUM + ZERO SODA SAVES 684 kcal (62%)</span></div>
+    <div class="row"><span>Alcohol</span><span id="r-units">6 drinks · 76 / 43 g</span></div>
+    <div class="row" style="margin-top:8px"><span id="r-vn">Vodka / rum + zero soda</span><span id="r-v">530 kcal</span></div>
+    <div class="row sub"><span id="r-vs">6.0 × 4 cl shots</span><span></span></div>
+    <div class="row"><span id="r-wn">Sweet pink 6%</span><span id="r-w">784 kcal</span></div>
+    <div class="row sub"><span id="r-ws">1.2 bottles</span><span></span></div>
+    <div class="row total big"><span>Peak BAC</span><span id="r-bac">0.06% / 0.01%</span></div>
+    <div class="row sub"><span>Sober at</span><span id="r-sob">~07:10 / ~03:50</span></div>
+    <div class="saved"><span id="r-save">VODKA / RUM + ZERO SODA SAVES 254 kcal (32%)</span></div>
   </div>
 </header>
 
@@ -112,7 +112,7 @@
     <div class="controls">
       <div><label>Body weight <span class="val" id="wo">80 kg</span></label><input type="range" id="w" min="40" max="140" step="1" value="80"></div>
       <div><label>Drinks per hour <span class="val" id="po">1.0</span></label><input type="range" id="p" min="0.5" max="3" step="0.25" value="1"><div class="note" style="margin-top:4px" id="pnote">1 drink = 10 g ethanol (1 unit) for both</div></div>
-      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same buzz</button><button id="c-glass" aria-pressed="false">Same servings</button></div><div class="note" style="margin-top:4px" id="cnote">Same buzz: 1 drink = 10 g ethanol for both. Same servings: one real serving each — a shot, a glass, a bottle.</div></div>
+      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="false">Same buzz</button><button id="c-glass" aria-pressed="true">Same servings</button></div><div class="note" style="margin-top:4px" id="cnote">Same buzz: 1 drink = 10 g ethanol for both. Same servings: one real serving each — a shot, a glass, a bottle.</div></div>
       <div><label>Start drinking at <span class="val" id="sto">22:00</span></label><input type="range" id="st" min="18" max="26" step="0.5" value="22"></div>
       <div><label>Stop drinking at <span class="val" id="eo">04:00</span></label><input type="range" id="e" min="1" max="10" step="0.5" value="6"><div class="note" style="margin-top:4px" id="enote">1 to 10 hours after the start</div></div>
       <div><label>Body type (Widmark r)</label><select id="s"><option value="0.68">Male · 0.68</option><option value="0.55">Female · 0.55</option></select></div>
@@ -215,7 +215,7 @@
 <script>
 const $=id=>document.getElementById(id);
 const AMBER='#E8A33D',ROSE='#E27AA0',MUTED='#6E7585',GRID='#232C3E';
-let mode='alc',ch1,ch2;
+let mode='glass',ch1,ch2;
 const MIXERS={zero:{name:'zero soda',kcal:0},coke:{name:'coke',kcal:42},oj:{name:'orange juice',kcal:45}}; // kcal per 100 ml, 200 ml per drink
 const DRINKS={clear:{name:'Vodka / rum',abv:0.40,sugar:0,glass:40,bottle:700,kind:'spirit'},spiced:{name:'Spiced rum',abv:0.35,sugar:25,glass:40,bottle:700,kind:'spirit'},sweet:{name:'Sweet pink 6%',abv:0.06,sugar:135,glass:150,bottle:750,kind:'wine'},brut:{name:'Brut pink 12%',abv:0.12,sugar:8,glass:150,bottle:750,kind:'wine'},dry:{name:'Dry wine 12.5%',abv:0.125,sugar:3,glass:150,bottle:750,kind:'wine'},blanc:{name:'1664 Blanc 5%',abv:0.05,sugar:30,glass:250,bottle:250,kind:'beer'},rouges:{name:'1664 Fruits Rouges 4.5%',abv:0.045,sugar:40,glass:250,bottle:250,kind:'beer'}};
 const hhmm=h=>{const t=((+$('st').value)+h)%24,hh=Math.floor(t),mm=Math.round((t-hh)*60);return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
@@ -234,7 +234,7 @@ function loadSettings(){try{const v=JSON.parse(localStorage.getItem(LS));if(!v)r
   const snap=(sel,sl,sv)=>{const D=DRINKS[$(sel).value];if(D.kind==='wine'&&(sv==null||isNaN(+sv)))$(sl).value=D.sugar;};
   snap('da','ga',v.ga);snap('db','gb',v.gb);
   if(v.s==='0.68'||v.s==='0.55')$('s').value=v.s;
-  if(v.mode==='glass'){mode='glass';press('c-alc','c-glass',false);}
+  if(v.mode==='alc'){mode='alc';press('c-alc','c-glass',true);}else if(v.mode==='glass'){mode='glass';press('c-alc','c-glass',false);}
 }catch(_){}}
 $('reset').onclick=()=>{try{localStorage.removeItem(LS)}catch(_){}location.reload();};
 function sim(g,W,r,P,E){
