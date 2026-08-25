@@ -7,7 +7,7 @@ Same buzz, different bill — an interactive comparison of what a night of drink
 ## Features
 
 - **Any two drinks side by side** — spirits (vodka / white or brown rum, spiced rum) with a mixer (zero soda, coke, orange juice), wines (sweet pink, brut, dry) with an adjustable residual-sugar slider, or beers (1664 Blanc, 1664 Fruits Rouges).
-- **Two comparison modes** — "same buzz" (10 g ethanol per drink for both) or "same servings" (a 4 cl shot vs a 150 ml pour vs a 25 cl bottle).
+- **Two comparison modes** — "same buzz" (each round is 10 g ethanol for both) or "same servings" (each round is one real serving: a 4 cl shot vs a 150 ml pour vs a 25 cl bottle).
 - **Receipt summary, estimated BAC curve** (simple Widmark model) with the French 0.05% / 0.02% driving limits, cumulative calorie chart, and a "what that looks like at home" bottle-equivalence table.
 - **Settings persist** in localStorage; the ↺ reset button restores defaults.
 

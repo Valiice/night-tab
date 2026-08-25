@@ -95,7 +95,7 @@
   <div class="receipt" aria-live="polite">
     <div class="head">THE NIGHT'S TAB</div>
     <div class="row"><span>Session</span><span id="r-sess">22:00 – 04:00</span></div>
-    <div class="row"><span>Alcohol</span><span id="r-units">6 drinks · 76 / 43 g</span></div>
+    <div class="row"><span>Alcohol</span><span id="r-units">6 rounds · 76 / 43 g</span></div>
     <div class="row" style="margin-top:8px"><span id="r-vn">Vodka / rum + zero soda</span><span id="r-v">530 kcal</span></div>
     <div class="row sub"><span id="r-vs">6.0 × 4 cl shots</span><span></span></div>
     <div class="row"><span id="r-wn">Sweet pink 6%</span><span id="r-w">784 kcal</span></div>
@@ -111,8 +111,8 @@
   <div class="panel">
     <div class="controls">
       <div><label>Body weight <span class="val" id="wo">80 kg</span></label><input type="range" id="w" min="40" max="140" step="1" value="80"></div>
-      <div><label>Drinks per hour <span class="val" id="po">1.0</span></label><input type="range" id="p" min="0.5" max="3" step="0.25" value="1"><div class="note" style="margin-top:4px" id="pnote">1 drink = 10 g ethanol (1 unit) for both</div></div>
-      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="false">Same buzz</button><button id="c-glass" aria-pressed="true">Same servings</button></div><div class="note" style="margin-top:4px" id="cnote">Same buzz: 1 drink = 10 g ethanol for both. Same servings: one real serving each — a shot, a glass, a bottle.</div></div>
+      <div><label>Rounds per hour <span class="val" id="po">1.0</span></label><input type="range" id="p" min="0.5" max="3" step="0.25" value="1"><div class="note" style="margin-top:4px" id="pnote">1 round = one full serving of each</div></div>
+      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="false">Same buzz</button><button id="c-glass" aria-pressed="true">Same servings</button></div><div class="note" style="margin-top:4px" id="cnote">Same buzz: each round is 10 g ethanol for both. Same servings: each round is one real serving — a shot, a glass, a bottle.</div></div>
       <div><label>Start drinking at <span class="val" id="sto">22:00</span></label><input type="range" id="st" min="18" max="26" step="0.5" value="22"></div>
       <div><label>Stop drinking at <span class="val" id="eo">04:00</span></label><input type="range" id="e" min="1" max="10" step="0.5" value="6"><div class="note" style="margin-top:4px" id="enote">1 to 10 hours after the start</div></div>
       <div><label>Body type (Widmark r)</label><select id="s"><option value="0.68">Male · 0.68</option><option value="0.55">Female · 0.55</option></select></div>
@@ -160,7 +160,7 @@
       <p style="color:var(--ink-2);margin:0">BAC is blood alcohol concentration: grams of ethanol per 100 ml of blood, shown as a percentage. 0.05% is the same as 0.5 g/L or 0.5‰. The body clears a fixed ~0.015% per hour — about 8 g of ethanol an hour for an 80 kg man, closer to 5 g for a smaller body — so for most people even one 10 g drink an hour slowly stacks up. Food, sleep, and body weight all move the curve; coffee and water don't sober you up, they just pass the time.</p>
     </div>
   </div></div>
-  <p class="note">In "same buzz" mode the curve is identical for both drinks — 10 g of ethanol is 10 g. Switch to "same servings" to see a shot per hour vs a glass or bottle per hour. Simple Widmark estimate: each drink lands instantly, liver clears ~0.015% per hour (≈8 g for an 80 kg man). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
+  <p class="note">In "same buzz" mode the curve is identical for both drinks — 10 g of ethanol is 10 g. Switch to "same servings" to see a shot per hour vs a glass or bottle per hour. Simple Widmark estimate: each round lands instantly, liver clears ~0.015% per hour (≈8 g for an 80 kg man). Real absorption is slower on a full stomach and faster on an empty one or with diet mixers (peak up to ~18% higher).</p>
 </section>
 
 <section>
@@ -172,7 +172,7 @@
 <section>
   <h2>What that looks like at home</h2>
   <table>
-    <tr><th>Bottle</th><th class="n">1 drink</th><th class="n">Tonight</th><th class="n">Of the bottle</th><th class="n">Drinks per bottle</th></tr>
+    <tr><th>Bottle</th><th class="n">1 round</th><th class="n">Tonight</th><th class="n">Of the bottle</th><th class="n">Rounds per bottle</th></tr>
     <tr class="hi"><td id="h-vn">Vodka 40%, 70 cl</td><td class="n" id="h-v1">—</td><td class="n" id="h-v2">—</td><td class="n" id="h-v3">—</td><td class="n" id="h-v4">—</td></tr>
     <tr><td id="h-wn">Wine, 75 cl</td><td class="n" id="h-w1">—</td><td class="n" id="h-w2">—</td><td class="n" id="h-w3">—</td><td class="n" id="h-w4">—</td></tr>
   </table>
@@ -267,7 +267,7 @@ function run(){
   $('goa').textContent=sw(sugA)+' · '+sugA+' g/L';$('gob').textContent=sw(sugB)+' · '+sugB+' g/L';
   $('wo').textContent=W+' kg';$('po').textContent=P.toFixed(2).replace(/0$/,'');$('eo').textContent=hhmm(E);
   $('sto').textContent=hhmm(0);$('enote').textContent='between '+hhmm(1)+' and '+hhmm(10);
-  $('pnote').textContent=glass?'1 drink = one '+A.glass+' ml '+A.name+' ('+gA.toFixed(1)+' g) or one '+B.glass+' ml '+B.name+' ('+gB.toFixed(1)+' g)':'1 drink = 10 g ethanol (1 unit) for both';
+  $('pnote').textContent=glass?'1 round = one '+A.glass+' ml '+A.name+' ('+gA.toFixed(1)+' g) or one '+B.glass+' ml '+B.name+' ('+gB.toFixed(1)+' g)':'1 round = a 10 g pour of either (1 unit)';
   $('m2k').textContent=nameA;$('m3k').textContent=nameB;
   $('r-vn').textContent=nameA;$('r-wn').textContent=nameB;
   $('lg-sp').textContent=nameA;$('lg-w').textContent=nameB;$('lg-v1').textContent=A.name;$('lg-w2').textContent=B.name;
@@ -289,12 +289,12 @@ function run(){
   const desc=(D,vol)=>D.kind==='spirit'?(vol/D.glass).toFixed(1)+' × '+(D.glass/10)+' cl shots':(vol/D.bottle).toFixed(1)+' bottles';
   const descA=desc(A,volA),descB=desc(B,volB);
   const sob=x=>x===null?'>'+hhmm(18):'~'+hhmm(x);
-  $('m1').textContent=n+' drinks';$('m1b').textContent=glass?Math.round(ethA)+' g / '+Math.round(ethB)+' g ethanol · '+E+' h':(n*10)+' g ethanol · '+E+' h';
+  $('m1').textContent=n+' rounds';$('m1b').textContent=glass?'one full serving each · '+Math.round(ethA)+' / '+Math.round(ethB)+' g · '+E+' h':'10 g pour each · '+(n*10)+' g total · '+E+' h';
   $('m2').textContent=kcalA+' kcal';$('m2b').textContent=Math.round(volA)+' ml = '+descA+(glass?' · peak '+V.peak.toFixed(2)+'%':' · '+Math.round(kcalA/n)+' kcal/unit');
   $('m3').textContent=kcalB+' kcal';$('m3b').textContent=Math.round(volB)+' ml = '+descB+(glass?' · peak '+Wn.peak.toFixed(2)+'%':' · '+Math.round(kcalB/n)+' kcal/unit');
   $('m4').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
   $('m4b').textContent=glass?'A / B · sober '+sob(V.sober)+' / '+sob(Wn.sober):'sober '+sob(V.sober);
-  $('r-sess').textContent=hhmm(0)+' – '+hhmm(E);$('r-units').textContent=n+' drinks · '+(glass?Math.round(ethA)+' / '+Math.round(ethB):n*10)+' g';
+  $('r-sess').textContent=hhmm(0)+' – '+hhmm(E);$('r-units').textContent=n+' rounds · '+(glass?Math.round(ethA)+' / '+Math.round(ethB):n*10)+' g';
   $('r-v').textContent=kcalA+' kcal';$('r-vs').textContent=descA;
   $('r-w').textContent=kcalB+' kcal';$('r-ws').textContent=descB;
   $('r-bac').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
@@ -311,7 +311,7 @@ function run(){
   $('h-wn').textContent=rowName(B);
   $('h-w1').textContent=one(B,v1B);
   $('h-w2').textContent=Math.round(volB)+' ml';$('h-w3').textContent=pctb(volB,B.bottle);$('h-w4').textContent=(B.bottle/v1B).toFixed(1);
-  $('h-note').textContent=glass?'Same servings: one serving of each — '+A.glass+' ml vs '+B.glass+' ml — so the two rows carry different amounts of alcohol.':'Same buzz: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one drink.';
+  $('h-note').textContent=glass?'Same servings: one serving of each — '+A.glass+' ml vs '+B.glass+' ml — so the two rows carry different amounts of alcohol.':'Same buzz: each round is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one round.';
   if(!window.Chart)return;
   const base={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false}};
   const x={ticks:{color:MUTED,maxTicksLimit:10,font:{family:'IBM Plex Mono'}},grid:{display:false}};
