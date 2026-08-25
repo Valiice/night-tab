@@ -160,6 +160,8 @@
       </div>
     </div>
 
+    <div class="note" style="margin-top:16px"><div id="pm1"></div><div id="pm2" style="margin-top:4px"></div></div>
+
     <div class="stats">
       <div class="stat"><div class="k">Total alcohol</div><div class="v" id="m1">—</div><div class="s" id="m1b"></div></div>
       <div class="stat amber"><div class="k" id="m2k">Vodka / rum + zero soda</div><div class="v" id="m2">—</div><div class="s" id="m2b"></div></div>
@@ -348,6 +350,15 @@ function run(){
   const sword=D=>D.kind==='spirit'?'shots':D.kind==='wine'?'glasses':'bottles';
   const eq=D=>((n*10)/(D.glass*D.abv*0.789)).toFixed(1)+' '+sword(D)+' ('+D.glass+' ml) of '+D.name;
   if(!glass)$('bacnote').textContent='One curve on purpose — 10 g of ethanol is 10 g, whatever the drink. Tonight’s '+(n*10)+' g is '+eq(A)+' or '+eq(B)+'. Switch to “same servings” to compare real pours instead.';
+  // pace matcher: same grams of ethanol per hour in the other drink's servings
+  {
+    const one=D=>D.kind==='spirit'?'shot':D.kind==='wine'?'glass':'bottle';
+    const sA=A.glass*A.abv*0.789, sB=B.glass*B.abv*0.789;
+    const fmtIv=ph=>{const m=Math.max(1,Math.round(60/ph));return m>=60?Math.floor(m/60)+' h '+String(m%60).padStart(2,'0'):m+' min';};
+    const pline=(X,sX,Y,sY)=>{const p2=P*sX/sY;return '⇄ Used to '+X.name+' at '+P+' '+(P===1?one(X):sword(X))+'/h? Match it on '+Y.name+': one '+one(Y)+' every ~'+fmtIv(p2)+' ('+p2.toFixed(1)+'/h) — ~'+(n*sX/sY).toFixed(1)+' '+sword(Y)+' by '+hhmm(E)+'.';};
+    $('pm1').textContent=pline(B,sB,A,sA);
+    $('pm2').textContent=pline(A,sA,B,sB);
+  }
   const perK=(g,D,sug,mix)=>g*7+(g/0.789/D.abv)*sug/1000*4+(mix?2*mix.kcal:0);
   const kA=perK(gA,A,sugA,mixA), kB=perK(gB,B,sugB,mixB);
   const kcalA=Math.round(kA*n), kcalB=Math.round(kB*n);
