@@ -268,7 +268,7 @@ function run(){
     {label:wname,data:pad(Wn.bd),borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,tension:.2,hidden:!glass},
     {label:'Limit 0.5 g/L',data:lim,borderColor:MUTED,borderDash:[4,4],borderWidth:1,pointRadius:0},
     {label:'Novice 0.2 g/L',data:nov,borderColor:MUTED,borderDash:[2,3],borderWidth:1,pointRadius:0}]},
-    options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v.toFixed(2)+'%',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
+    options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v.toFixed(3)+'%',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
   if(ch2){ch2.data.labels=labels;ch2.data.datasets[0].label=sname;ch2.data.datasets[0].data=kv;ch2.data.datasets[1].data=kw;ch2.data.datasets[1].label=wname;ch2.data.datasets[2].data=kd;ch2.update();}
   else ch2=new Chart($('c2'),{type:'line',data:{labels,datasets:[{label:sname,data:kv,borderColor:AMBER,borderWidth:2,pointRadius:0,stepped:true},{label:wname,data:kw,borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,stepped:true},{label:'Difference',data:kd,borderColor:MUTED,borderWidth:2,pointRadius:0,stepped:true}]},options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v+' kcal',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
 }
