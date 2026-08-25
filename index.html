@@ -102,13 +102,15 @@
     <div class="controls">
       <div><label>Body weight <span class="val" id="wo">80 kg</span></label><input type="range" id="w" min="40" max="140" step="1" value="80"></div>
       <div><label>Drinks per hour <span class="val" id="po">1.0</span></label><input type="range" id="p" min="0.5" max="3" step="0.25" value="1"><div class="note" style="margin-top:4px" id="pnote">1 drink = 10 g ethanol (1 unit) for both</div></div>
-      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same alcohol</button><button id="c-glass" aria-pressed="false">Same number of glasses</button></div><div class="note" style="margin-top:4px" id="cnote">A 4 cl shot vs a 150 ml glass — different amounts of alcohol per serving.</div></div>
+      <div><label>Compare at</label><div class="seg" role="group" aria-label="Comparison mode"><button id="c-alc" aria-pressed="true">Same alcohol</button><button id="c-glass" aria-pressed="false">Same number of glasses</button></div><div class="note" style="margin-top:4px" id="cnote">Servings differ in size — a shot, a glass, a bottle — so they carry different amounts of alcohol.</div></div>
       <div><label>Stop drinking at <span class="val" id="eo">04:00</span></label><input type="range" id="e" min="1" max="10" step="0.5" value="6"><div class="note" style="margin-top:4px">starting at 22:00 · slide from 23:00 to 08:00</div></div>
       <div><label>Body type (Widmark r)</label><select id="s"><option value="0.68">Male · 0.68</option><option value="0.55">Female · 0.55</option></select></div>
-      <div><label>The spirit</label><select id="sp"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option></select></div>
-      <div><label>The mixer</label><select id="mx"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
-      <div><label>The other drink</label><select id="wt"><option value="sweet">Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select></div>
-      <div><label>Sugar &amp; carbs in the drink <span class="val" id="go"></span></label><input type="range" id="g" min="0" max="160" step="5" value="135"><div class="note" style="margin-top:4px">Sugar left in the wine after fermentation. See the label table below: brut ≈ 0–12 g per litre, a sweet 6% sparkling ≈ 50–140.</div></div>
+      <div><label>Drink A</label><select id="da"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option><option value="sweet">Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select></div>
+      <div id="mwa"><label>Mixer for A</label><select id="ma"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
+      <div id="gwa" style="display:none"><label>Sugar &amp; carbs in A <span class="val" id="goa"></span></label><input type="range" id="ga" min="0" max="160" step="5" value="0"><div class="note" style="margin-top:4px">Sugar left after fermentation — see the label table below, or the kcal per 100 ml on the bottle.</div></div>
+      <div><label>Drink B</label><select id="db"><option value="clear">Vodka · white or brown rum · 40%</option><option value="spiced">Spiced rum · 35%</option><option value="sweet" selected>Sweet pink sparkling · 6%</option><option value="brut">Brut pink sparkling · 12%</option><option value="drywhite">Dry white · 12.5%</option><option value="dryred">Dry red · 12.5%</option><option value="moscato">Moscato · 5.5%</option><option value="blanc">1664 Blanc · 5%</option><option value="rouges">1664 Fruits Rouges · 4.5%</option></select></div>
+      <div id="mwb" style="display:none"><label>Mixer for B</label><select id="mb"><option value="zero">Zero soda · 0 kcal</option><option value="coke">Coke · 42 kcal/100 ml</option><option value="oj">Orange juice · 45 kcal/100 ml</option></select></div>
+      <div id="gwb"><label>Sugar &amp; carbs in B <span class="val" id="gob"></span></label><input type="range" id="gb" min="0" max="160" step="5" value="135"><div class="note" style="margin-top:4px">Sugar left in the wine after fermentation. See the label table below: brut ≈ 0–12 g per litre, a sweet 6% sparkling ≈ 50–140.</div></div>
     </div>
 
     <div class="stats">
@@ -193,15 +195,15 @@
 const $=id=>document.getElementById(id);
 const AMBER='#E8A33D',ROSE='#E27AA0',MUTED='#6E7585',GRID='#232C3E';
 let mode='alc',ch1,ch2;
-const SPIRITS={clear:{name:'Vodka / rum',abv:0.40,sugar:0},spiced:{name:'Spiced rum',abv:0.35,sugar:25}};
 const MIXERS={zero:{name:'zero soda',kcal:0},coke:{name:'coke',kcal:42},oj:{name:'orange juice',kcal:45}}; // kcal per 100 ml, 200 ml per drink
-const WINES={sweet:{name:'Sweet pink 6%',abv:0.06,sugar:135,glass:150,bottle:750},brut:{name:'Brut pink 12%',abv:0.12,sugar:8,glass:150,bottle:750},drywhite:{name:'Dry white 12.5%',abv:0.125,sugar:3,glass:150,bottle:750},dryred:{name:'Dry red 12.5%',abv:0.125,sugar:3,glass:150,bottle:750},moscato:{name:'Moscato 5.5%',abv:0.055,sugar:120,glass:150,bottle:750},blanc:{name:'1664 Blanc 5%',abv:0.05,sugar:30,glass:250,bottle:250},rouges:{name:'1664 Fruits Rouges 4.5%',abv:0.045,sugar:40,glass:250,bottle:250}};
+const DRINKS={clear:{name:'Vodka / rum',abv:0.40,sugar:0,glass:40,bottle:700,kind:'spirit'},spiced:{name:'Spiced rum',abv:0.35,sugar:25,glass:40,bottle:700,kind:'spirit'},sweet:{name:'Sweet pink 6%',abv:0.06,sugar:135,glass:150,bottle:750,kind:'wine'},brut:{name:'Brut pink 12%',abv:0.12,sugar:8,glass:150,bottle:750,kind:'wine'},drywhite:{name:'Dry white 12.5%',abv:0.125,sugar:3,glass:150,bottle:750,kind:'wine'},dryred:{name:'Dry red 12.5%',abv:0.125,sugar:3,glass:150,bottle:750,kind:'wine'},moscato:{name:'Moscato 5.5%',abv:0.055,sugar:120,glass:150,bottle:750,kind:'wine'},blanc:{name:'1664 Blanc 5%',abv:0.05,sugar:30,glass:250,bottle:250,kind:'beer'},rouges:{name:'1664 Fruits Rouges 4.5%',abv:0.045,sugar:40,glass:250,bottle:250,kind:'beer'}};
 const hhmm=h=>{const t=(22+h)%24,hh=Math.floor(t),mm=Math.round((t-hh)*60);return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
 const press=(a,b,on)=>{$(a).setAttribute('aria-pressed',on);$(b).setAttribute('aria-pressed',!on);};
 function setMode(k){mode=k;press('c-alc','c-glass',k==='alc');run();}
 $('c-alc').onclick=()=>setMode('alc');$('c-glass').onclick=()=>setMode('glass');
-$('wt').addEventListener('change',()=>{$('g').value=WINES[$('wt').value].sugar;run();});
-$('sp').addEventListener('change',run);$('mx').addEventListener('change',run);
+$('da').addEventListener('change',()=>{const D=DRINKS[$('da').value];if(D.kind==='wine')$('ga').value=D.sugar;run();});
+$('db').addEventListener('change',()=>{const D=DRINKS[$('db').value];if(D.kind==='wine')$('gb').value=D.sugar;run();});
+$('ma').addEventListener('change',run);$('mb').addEventListener('change',run);
 function sim(g,W,r,P,E){
   const per=g/(W*r)/10,step=1/6,gap=1/P;
   let bac=0,t=0,next=0,n=0,peak=0,sober=null;const bd=[];
@@ -217,62 +219,72 @@ function sim(g,W,r,P,E){
   return{bd,n,peak,sober};
 }
 function run(){
-  const W=+$('w').value,P=+$('p').value,E=+$('e').value,r=+$('s').value,G=+$('g').value;
-  const S=SPIRITS[$('sp').value],M=MIXERS[$('mx').value],WN=WINES[$('wt').value];
-  const abv=WN.abv,wname=WN.name,sname=S.name+' + '+M.name;
+  const W=+$('w').value,P=+$('p').value,E=+$('e').value,r=+$('s').value;
+  const A=DRINKS[$('da').value],B=DRINKS[$('db').value];
   const glass=mode==='glass';
-  const gV=glass?40*S.abv*0.789:10, gW=glass?WN.glass*abv*0.789:10;
-  const sweet=G<=12?'dry':G<=30?'off-dry':G<=50?'medium':'sweet';
-  $('wo').textContent=W+' kg';$('po').textContent=P.toFixed(2).replace(/0$/,'');$('eo').textContent=hhmm(E);$('go').textContent=sweet+' · '+G+' g/L';
-  $('pnote').textContent=glass?'1 drink = one 4 cl shot ('+gV.toFixed(1)+' g) or one '+WN.glass+' ml pour ('+gW.toFixed(1)+' g)':'1 drink = 10 g ethanol (1 unit) for both';
-  $('m3k').textContent=wname;$('lg-w').textContent=wname;$('lg-w2').textContent=wname;$('r-wn').textContent=wname;
-  $('m2k').textContent=sname;$('r-vn').textContent=sname;$('lg-sp').textContent=sname;$('lg-v1').textContent=S.name.toLowerCase();
+  $('mwa').style.display=A.kind==='spirit'?'':'none';$('mwb').style.display=B.kind==='spirit'?'':'none';
+  $('gwa').style.display=A.kind==='wine'?'':'none';$('gwb').style.display=B.kind==='wine'?'':'none';
+  const sugA=A.kind==='wine'?+$('ga').value:A.sugar, sugB=B.kind==='wine'?+$('gb').value:B.sugar;
+  const mixA=A.kind==='spirit'?MIXERS[$('ma').value]:null, mixB=B.kind==='spirit'?MIXERS[$('mb').value]:null;
+  const nameA=mixA?A.name+' + '+mixA.name:A.name, nameB=mixB?B.name+' + '+mixB.name:B.name;
+  const gA=glass?A.glass*A.abv*0.789:10, gB=glass?B.glass*B.abv*0.789:10;
+  const sw=s=>s<=12?'dry':s<=30?'off-dry':s<=50?'medium':'sweet';
+  $('goa').textContent=sw(sugA)+' · '+sugA+' g/L';$('gob').textContent=sw(sugB)+' · '+sugB+' g/L';
+  $('wo').textContent=W+' kg';$('po').textContent=P.toFixed(2).replace(/0$/,'');$('eo').textContent=hhmm(E);
+  $('pnote').textContent=glass?'1 drink = one '+A.glass+' ml '+A.name+' ('+gA.toFixed(1)+' g) or one '+B.glass+' ml '+B.name+' ('+gB.toFixed(1)+' g)':'1 drink = 10 g ethanol (1 unit) for both';
+  $('m2k').textContent=nameA;$('m3k').textContent=nameB;
+  $('r-vn').textContent=nameA;$('r-wn').textContent=nameB;
+  $('lg-sp').textContent=nameA;$('lg-w').textContent=nameB;$('lg-v1').textContent=A.name;$('lg-w2').textContent=B.name;
   $('lg-wb').style.display=glass?'':'none';
-  const V=sim(gV,W,r,P,E),Wn=sim(gW,W,r,P,E);
+  const V=sim(gA,W,r,P,E),Wn=sim(gB,W,r,P,E);
   const len=Math.max(V.bd.length,Wn.bd.length),labels=[];for(let i=0;i<len;i++)labels.push(hhmm(i/6));
   const pad=(arr)=>{const o=arr.slice();while(o.length<len)o.push(0);return o;};
-  const n=V.n, ethV=n*gV, ethW=n*gW;
-  const vTml=ethV/0.789/S.abv;
-  const kcalV=Math.round(ethV*7+vTml*S.sugar/1000*4+n*2*M.kcal), kcalW=Math.round(ethW*7+(ethW/0.789/abv)*G/1000*4);
-  const kv=[],kw=[];let c=0;const per1=len/1;{let next=0,cnt=0;for(let i=0;i<len;i++){const t=i/6;while(next<=t+1e-9&&next<E-1e-9){cnt++;next+=1/P;}kv.push(Math.round(cnt*(gV*7+(gV/0.789/S.abv)*S.sugar/1000*4+2*M.kcal)));kw.push(Math.round(cnt*(gW*7+(gW/0.789/abv)*G/1000*4)));}}
-  const save=kcalW-kcalV,pct=kcalW?Math.round(save/kcalW*100):0;
-  const shots=(vTml/40).toFixed(1),bottles=(ethW/0.789/abv/WN.bottle).toFixed(1);
+  const n=V.n, ethA=n*gA, ethB=n*gB;
+  const volA=ethA/0.789/A.abv, volB=ethB/0.789/B.abv;
+  const perK=(g,D,sug,mix)=>g*7+(g/0.789/D.abv)*sug/1000*4+(mix?2*mix.kcal:0);
+  const kcalA=Math.round(perK(gA,A,sugA,mixA)*n), kcalB=Math.round(perK(gB,B,sugB,mixB)*n);
+  const kv=[],kw=[];{let next=0,cnt=0;for(let i=0;i<len;i++){const t=i/6;while(next<=t+1e-9&&next<E-1e-9){cnt++;next+=1/P;}kv.push(Math.round(cnt*perK(gA,A,sugA,mixA)));kw.push(Math.round(cnt*perK(gB,B,sugB,mixB)));}}
+  const save=kcalB-kcalA,costlier=Math.max(kcalA,kcalB),pct=costlier?Math.round(Math.abs(save)/costlier*100):0;
+  const desc=(D,vol)=>D.kind==='spirit'?(vol/40).toFixed(1)+' × 4 cl shots':(vol/D.bottle).toFixed(1)+' bottles';
+  const descA=desc(A,volA),descB=desc(B,volB);
   const sob=x=>x===null?'>16:00':'~'+hhmm(x);
-  $('m1').textContent=n+' drinks';$('m1b').textContent=glass?Math.round(ethV)+' g on vodka · '+Math.round(ethW)+' g on wine':(n*10)+' g ethanol · '+E+' h';
-  $('m2').textContent=kcalV+' kcal';$('m2b').textContent=Math.round(vTml)+' ml = '+shots+' × 4 cl · peak '+V.peak.toFixed(2)+'%';
-  $('m3').textContent=kcalW+' kcal';$('m3b').textContent=bottles+' bottles'+(glass?' · peak '+Wn.peak.toFixed(2)+'%':' · '+Math.round(kcalW/n)+' kcal/unit');
+  $('m1').textContent=n+' drinks';$('m1b').textContent=glass?Math.round(ethA)+' g / '+Math.round(ethB)+' g ethanol · '+E+' h':(n*10)+' g ethanol · '+E+' h';
+  $('m2').textContent=kcalA+' kcal';$('m2b').textContent=Math.round(volA)+' ml = '+descA+(glass?' · peak '+V.peak.toFixed(2)+'%':' · '+Math.round(kcalA/n)+' kcal/unit');
+  $('m3').textContent=kcalB+' kcal';$('m3b').textContent=Math.round(volB)+' ml = '+descB+(glass?' · peak '+Wn.peak.toFixed(2)+'%':' · '+Math.round(kcalB/n)+' kcal/unit');
   $('m4').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
-  $('m4b').textContent=glass?'vodka / wine · sober '+sob(V.sober)+' / '+sob(Wn.sober):'sober '+sob(V.sober);
-  $('r-sess').textContent='22:00 – '+hhmm(E);$('r-units').textContent=n+' drinks · '+(glass?Math.round(ethV)+' / '+Math.round(ethW):n*10)+' g';
-  $('r-v').textContent=kcalV+' kcal';$('r-vs').textContent=shots+' × 4 cl shots';
-  $('r-w').textContent=kcalW+' kcal';$('r-ws').textContent=bottles+' bottles';
+  $('m4b').textContent=glass?'A / B · sober '+sob(V.sober)+' / '+sob(Wn.sober):'sober '+sob(V.sober);
+  $('r-sess').textContent='22:00 – '+hhmm(E);$('r-units').textContent=n+' drinks · '+(glass?Math.round(ethA)+' / '+Math.round(ethB):n*10)+' g';
+  $('r-v').textContent=kcalA+' kcal';$('r-vs').textContent=descA;
+  $('r-w').textContent=kcalB+' kcal';$('r-ws').textContent=descB;
   $('r-bac').textContent=glass?V.peak.toFixed(2)+'% / '+Wn.peak.toFixed(2)+'%':V.peak.toFixed(2)+'%';
   $('r-sob').textContent=glass?sob(V.sober)+' / '+sob(Wn.sober):sob(V.sober);
-  const kd=kw.map((v,i)=>v-kv[i]);$('lg-pct').textContent=(save>=0?'vodka ':'wine ')+Math.abs(pct)+'% cheaper, '+Math.abs(save)+' kcal by the end';
-  $('r-save').textContent=(save>=0?'VODKA SAVES ':'WINE SAVES ')+Math.abs(save)+' kcal ('+Math.abs(pct)+'%)';
-  const v1=gV/0.789/S.abv, w1=gW/0.789/abv, vT=vTml, wT=ethW/0.789/abv;
+  const kd=kw.map((v,i)=>v-kv[i]);$('lg-pct').textContent=(save>=0?nameA:nameB)+' '+Math.abs(pct)+'% cheaper, '+Math.abs(save)+' kcal by the end';
+  $('r-save').textContent=(save>=0?nameA:nameB).toUpperCase()+' SAVES '+Math.abs(save)+' kcal ('+Math.abs(pct)+'%)';
+  const v1A=gA/0.789/A.abv, v1B=gB/0.789/B.abv;
   const pctb=(ml,b)=>Math.round(ml/b*100)+'%';
-  $('h-vn').textContent=S.name+' '+Math.round(S.abv*100)+'%, 70 cl';
-  $('h-v1').textContent=(v1/10).toFixed(1)+' cl · '+Math.round(v1/15*10)/10+' tbsp';
-  $('h-v2').textContent=Math.round(vT)+' ml';$('h-v3').textContent=pctb(vT,700);$('h-v4').textContent=Math.round(700/v1);
-  $('h-wn').textContent=wname+', '+(WN.bottle/10)+' cl';
-  $('h-w1').textContent=Math.round(w1)+' ml · '+(w1/WN.glass).toFixed(1)+(WN.bottle===750?' glasses':' bottles');
-  $('h-w2').textContent=Math.round(wT)+' ml';$('h-w3').textContent=pctb(wT,WN.bottle);$('h-w4').textContent=(WN.bottle/w1).toFixed(1);
-  $('h-note').textContent=glass?'Same number of glasses: a drink is one 4 cl shot or one '+WN.glass+' ml pour, so the two rows carry different amounts of alcohol.':'Same alcohol: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one drink.';
+  const rowName=D=>D.name+(D.kind==='spirit'?' '+Math.round(D.abv*100)+'%':'')+', '+(D.bottle/10)+' cl';
+  const one=(D,v1)=>D.kind==='spirit'?(v1/10).toFixed(1)+' cl · '+Math.round(v1/15*10)/10+' tbsp':Math.round(v1)+' ml · '+(v1/D.glass).toFixed(1)+(D.kind==='wine'?' glasses':' bottles');
+  $('h-vn').textContent=rowName(A);
+  $('h-v1').textContent=one(A,v1A);
+  $('h-v2').textContent=Math.round(volA)+' ml';$('h-v3').textContent=pctb(volA,A.bottle);$('h-v4').textContent=(A.bottle/v1A).toFixed(1);
+  $('h-wn').textContent=rowName(B);
+  $('h-w1').textContent=one(B,v1B);
+  $('h-w2').textContent=Math.round(volB)+' ml';$('h-w3').textContent=pctb(volB,B.bottle);$('h-w4').textContent=(B.bottle/v1B).toFixed(1);
+  $('h-note').textContent=glass?'Same number of glasses: one serving of each — '+A.glass+' ml vs '+B.glass+' ml — so the two rows carry different amounts of alcohol.':'Same alcohol: a drink is 10 g of ethanol in both rows. A 30 ml kitchen measure or two level tablespoons of spirit is one drink.';
   const base={responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},interaction:{mode:'index',intersect:false}};
   const x={ticks:{color:MUTED,maxTicksLimit:10,font:{family:'IBM Plex Mono'}},grid:{display:false}};
   const lim=labels.map(()=>0.05),nov=labels.map(()=>0.02);
-  if(ch1){ch1.data.labels=labels;ch1.data.datasets[0].label=S.name;ch1.data.datasets[0].data=pad(V.bd);ch1.data.datasets[1].data=pad(Wn.bd);ch1.data.datasets[1].hidden=!glass;ch1.data.datasets[1].label=wname;ch1.data.datasets[2].data=lim;ch1.data.datasets[3].data=nov;ch1.update();}
+  if(ch1){ch1.data.labels=labels;ch1.data.datasets[0].label=A.name;ch1.data.datasets[0].data=pad(V.bd);ch1.data.datasets[1].data=pad(Wn.bd);ch1.data.datasets[1].hidden=!glass;ch1.data.datasets[1].label=B.name;ch1.data.datasets[2].data=lim;ch1.data.datasets[3].data=nov;ch1.update();}
   else ch1=new Chart($('c1'),{type:'line',data:{labels,datasets:[
-    {label:S.name,data:pad(V.bd),borderColor:AMBER,backgroundColor:'rgba(232,163,61,.12)',fill:true,borderWidth:2,pointRadius:0,tension:.2},
-    {label:wname,data:pad(Wn.bd),borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,tension:.2,hidden:!glass},
+    {label:A.name,data:pad(V.bd),borderColor:AMBER,backgroundColor:'rgba(232,163,61,.12)',fill:true,borderWidth:2,pointRadius:0,tension:.2},
+    {label:B.name,data:pad(Wn.bd),borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,tension:.2,hidden:!glass},
     {label:'Limit 0.5 g/L',data:lim,borderColor:MUTED,borderDash:[4,4],borderWidth:1,pointRadius:0},
     {label:'Novice 0.2 g/L',data:nov,borderColor:MUTED,borderDash:[2,3],borderWidth:1,pointRadius:0}]},
     options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v.toFixed(3)+'%',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
-  if(ch2){ch2.data.labels=labels;ch2.data.datasets[0].label=sname;ch2.data.datasets[0].data=kv;ch2.data.datasets[1].data=kw;ch2.data.datasets[1].label=wname;ch2.data.datasets[2].data=kd;ch2.update();}
-  else ch2=new Chart($('c2'),{type:'line',data:{labels,datasets:[{label:sname,data:kv,borderColor:AMBER,borderWidth:2,pointRadius:0,stepped:true},{label:wname,data:kw,borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,stepped:true},{label:'Difference',data:kd,borderColor:MUTED,borderWidth:2,pointRadius:0,stepped:true}]},options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v+' kcal',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
+  if(ch2){ch2.data.labels=labels;ch2.data.datasets[0].label=nameA;ch2.data.datasets[0].data=kv;ch2.data.datasets[1].data=kw;ch2.data.datasets[1].label=nameB;ch2.data.datasets[2].data=kd;ch2.update();}
+  else ch2=new Chart($('c2'),{type:'line',data:{labels,datasets:[{label:nameA,data:kv,borderColor:AMBER,borderWidth:2,pointRadius:0,stepped:true},{label:nameB,data:kw,borderColor:ROSE,borderWidth:2,borderDash:[6,3],pointRadius:0,stepped:true},{label:'Difference',data:kd,borderColor:MUTED,borderWidth:2,pointRadius:0,stepped:true}]},options:{...base,scales:{x,y:{min:0,ticks:{color:MUTED,callback:v=>v+' kcal',font:{family:'IBM Plex Mono'}},grid:{color:GRID}}}}});
 }
-['w','p','e','s','g'].forEach(id=>$(id).addEventListener('input',run));
+['w','p','e','s','ga','gb'].forEach(id=>$(id).addEventListener('input',run));
 run();
 </script>
 </body>
